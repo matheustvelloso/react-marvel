@@ -36,3 +36,17 @@ export const FormGroup = styled(Form)`
     box-shadow: 0 4px 16px #c6a972;
   }
 `;
+
+export const ReloadButton = styled.button`
+  transition: 400ms;
+  display: flex;
+  border: none;
+  background-color: transparent;
+  font-size: 50px;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: #e62429;
+  }
+`;
