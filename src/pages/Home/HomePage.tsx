@@ -1,9 +1,8 @@
 import { FormEvent, memo, useCallback, useEffect, useState } from 'react';
 
 import { Button, Container, Form } from 'react-bootstrap';
-import { AiOutlineReload } from 'react-icons/ai';
+import { BsArrowLeft } from 'react-icons/bs';
 import { FaSearch } from 'react-icons/fa';
-import { MdCleaningServices } from 'react-icons/md';
 
 import { useCharacters } from 'context/CharactersContext';
 
@@ -18,7 +17,7 @@ import { FormGroup, ReloadButton } from './styles';
 
 const Home: React.FC = () => {
   const setTitle = useTitle();
-  const [value, setValue] = useState<string>();
+  const [value, setValue] = useState('');
   const {
     characters,
     isLoading,
@@ -28,7 +27,7 @@ const Home: React.FC = () => {
     fetchCharacters,
   } = useCharacters();
 
-  const handleSubmit = useCallback(
+  const handleSearch = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       fetchCharacters(0, value);
@@ -58,7 +57,7 @@ const Home: React.FC = () => {
       {!isLoading && !error && (
         <main className="bg-dark py-1">
           <Container className="pb-5">
-            <FormGroup onSubmit={handleSubmit}>
+            <FormGroup onSubmit={handleSearch}>
               <Form.Control
                 type="text"
                 placeholder="Search Character"
@@ -68,13 +67,13 @@ const Home: React.FC = () => {
               <Button variant="primary" disabled={!value?.length} type="submit">
                 <FaSearch />
               </Button>
-              {value?.length && (
+              {value?.length > 0 && (
                 <Button
                   variant="primary"
-                  onClick={() => setValue('')}
+                  onClick={handleButtonReload}
                   type="submit"
                 >
-                  <MdCleaningServices />
+                  X
                 </Button>
               )}
             </FormGroup>
@@ -85,7 +84,10 @@ const Home: React.FC = () => {
                   <div className="text-white d-flex flex-column align-items-center">
                     <h2>Character Not Found</h2>
                     <ReloadButton type="button" onClick={handleButtonReload}>
-                      <AiOutlineReload />
+                      <div className="d-flex align-items-center">
+                        <BsArrowLeft />
+                        <span className="ms-1">Go Back</span>
+                      </div>
                     </ReloadButton>
                   </div>
                 ) : (

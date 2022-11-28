@@ -1,9 +1,8 @@
 import { FormEvent, memo, useCallback, useEffect, useState } from 'react';
 
 import { Button, Container, Form } from 'react-bootstrap';
-import { AiOutlineReload } from 'react-icons/ai';
+import { BsArrowLeft } from 'react-icons/bs';
 import { FaSearch } from 'react-icons/fa';
-import { MdCleaningServices } from 'react-icons/md';
 
 import { useComics } from 'context/ComicsContext';
 
@@ -17,12 +16,12 @@ import useTitle from 'hooks/useTitle';
 import { FormGroup, ReloadButton } from './styles';
 
 const Comics: React.FC = () => {
-  const [value, setValue] = useState<string>();
+  const [value, setValue] = useState('');
   const setTitle = useTitle();
   const { comics, isLoading, totalPages, currentPage, error, fetchComics } =
     useComics();
 
-  const handleSubmit = useCallback(
+  const handleSearch = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       fetchComics(0, value);
@@ -52,7 +51,7 @@ const Comics: React.FC = () => {
       {!isLoading && !error && (
         <main className="bg-dark py-1">
           <Container className="pb-5">
-            <FormGroup onSubmit={handleSubmit}>
+            <FormGroup onSubmit={handleSearch}>
               <Form.Control
                 type="text"
                 placeholder="Search Comics"
@@ -62,13 +61,13 @@ const Comics: React.FC = () => {
               <Button variant="primary" disabled={!value?.length} type="submit">
                 <FaSearch />
               </Button>
-              {value?.length && (
+              {value?.length > 0 && (
                 <Button
                   variant="primary"
-                  onClick={() => setValue('')}
+                  onClick={handleButtonReload}
                   type="submit"
                 >
-                  <MdCleaningServices />
+                  X
                 </Button>
               )}
             </FormGroup>
@@ -78,7 +77,10 @@ const Comics: React.FC = () => {
                   <div className="text-white d-flex flex-column align-items-center">
                     <h2>Comic Not Found</h2>
                     <ReloadButton type="button" onClick={handleButtonReload}>
-                      <AiOutlineReload />
+                      <div className="d-flex align-items-center">
+                        <BsArrowLeft />
+                        <span className="ms-1">Go Back</span>
+                      </div>
                     </ReloadButton>
                   </div>
                 ) : (
